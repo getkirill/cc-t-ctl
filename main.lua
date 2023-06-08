@@ -23,7 +23,9 @@ end;
 function downloadFile(url, location, binary)
 	if binary then
 	else
-		(fs.open(location, "w")).write((http.get(url)).readAll());
+    local res = http.get(url)
+		(fs.open(location, "w")).write((res).readAll());
+    res.close()
 	end;
 end;
 local function githubRepo(path)

@@ -4,7 +4,9 @@ local function githubRepo(path)
 	end;
 end;
 function downloadFile(url, location)
-	(fs.open(location, "w")).write((http.get(url)).readAll());
+  local res = http.get(url)
+		(fs.open(location, "w")).write((res).readAll());
+    res.close()
 end;
 function readManifest(path)
 	local text = (fs.open(path, "r")).readAll();
