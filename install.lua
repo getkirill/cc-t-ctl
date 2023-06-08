@@ -13,7 +13,7 @@ local files = {
   "pseudocode.txt",
   "README.md"
 }
-local basePath = "/programs/cc-t-ctl"
+local basePath = "/programs/cc-t-ctl/"
 for _, file in pairs(files) do
   local url = repo(file)
   shell.run("wget", url, basePath..file)
