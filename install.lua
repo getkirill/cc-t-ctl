@@ -5,7 +5,9 @@ local function githubRepo(path)
 end;
 function downloadFile(url, location)
 	local res = http.get(url);
-	(fs.open(location, "w")).write(res.readAll());
+	local handle = fs.open(location, "w");
+	handle.write(res.readAll());
+	handle.close();
 	res.close();
 end;
 function readManifest(path)
@@ -20,9 +22,8 @@ if fs.exists(basePath) and fs.isDir(basePath) then
 	print("Previous installation detected, removing folder...");
 	fs.delete(basePath);
 end;
-fs.mkdir(basePath)
+fs.makeDir(basePath);
 downloadFile(repo("manifest.lua"), basePath .. "manifest.lua");
-os.sleep(0);
 local manifest = readManifest(basePath .. "manifest.lua");
 print(fs.exists(basePath .. "manifest.lua"));
 print(textutils.serialise(manifest));

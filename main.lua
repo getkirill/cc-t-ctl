@@ -24,7 +24,9 @@ function downloadFile(url, location, binary)
 	if binary then
 	else
     local res = http.get(url)
-		(fs.open(location, "w")).write((res).readAll());
+		local handle = fs.open(location, "w")
+    handle.write(res.readAll())
+    handle.close()
     res.close()
 	end;
 end;
