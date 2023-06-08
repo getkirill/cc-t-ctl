@@ -14,7 +14,7 @@ local files = {
   "README.md"
 }
 local basePath = "/programs/cc-t-ctl/"
-if fs.exists(basePath) and fs.isDir(path) then
+if fs.exists(basePath) and fs.isDir(basePath) then
   print("Previous installation detected, removing folder...")
   fs.delete(basePath)
 end
