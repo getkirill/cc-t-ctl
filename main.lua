@@ -16,6 +16,15 @@ end;
 function string.starts(String, Start)
 	return string.sub(String, 1, string.len(Start)) == Start;
 end;
+function table.contains(table, element)
+  for _, value in pairs(table) do
+    if value == element then
+      return true
+    end
+  end
+  return false
+end
+
 function readManifest(path)
 	local text = (fs.open(path, "r")).readAll();
 	return (load(text))();
@@ -84,10 +93,21 @@ local function installPackageCommand(packageLocation)
 	installPackage(manifest);
 	setPackageAliases(manifest);
 end;
+local function cleanInstall(package)
+  local manifest = readManifest(package)
+  fs.delete(packagesPath .. "/" .. package)
+  installPackageCommand(manifest.location)
+end
+
 if args[1] == "install" then
 	installPackageCommand(args[2]);
 end;
 if args[1] == "clean" then
+  if args[2] ~= nil then
+    cleanPackage(args[2])
+  else
+    --cleanPackages()
+  end
 	--todo add cleaning
 end;
 if args[1] == "list" then
