@@ -1,3 +1,4 @@
+-- wget https://raw.githubusercontent.com/getkirill/cc-t-ctl/main/install.lua cc-t-ctl.install.lua
 local function githubRepo(path)
   return function(file)
     return "https://raw.githubusercontent.com/"..path.."/"..file.."?random="..tostring(math.random(10000000))
