@@ -1,7 +1,7 @@
 return {
 	name = "cc-t-ctl",
 	version = "1",
-	location = "gh:getkirill/cc-t-ctl/main",
+	--location = "gh:getkirill/cc-t-ctl/main", -- unused, packages now save their download location to __meta_location file
 	files = {
     "install.lua",
 		"main.lua",

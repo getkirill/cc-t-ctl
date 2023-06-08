@@ -77,15 +77,24 @@ local function scaffoldPackage(manifestUrl)
 	fs.makeDir(packagesPath .. "/" .. manifest.name);
 	return manifest;
 end;
+local function getMetaLocation(packageName)
+	local metaLocation = fs.open(packagesPath .. "/" .. packageName .. "/" .. "__meta_location", "r");
+	return metaLocation.readAll();
+end;
+local function setMetaLocation(packageName, packageLocation)
+	local metaLocation = fs.open(packagesPath .. "/" .. packageName .. "/" .. "__meta_location", "w");
+	metaLocation.write(packageLocation);
+	metaLocation.close();
+end;
 local function installPackage(manifest)
-	local packageFs = packageFs(manifest.location);
+	local packageFs = packageFs(getMetaLocation(manifest.name));
 	for _, file in pairs(manifest.files) do
 		print("Downloading " .. file .. "...");
 		downloadFile(packageFs(file), packagesPath .. "/" .. manifest.name .. "/" .. file);
 	end;
-  if fs.exists(packagesPath .. "/" .. manifest.name .. "/install.lua") then
-    dofile(packagesPath .. "/" .. manifest.name .. "/install.lua")
-  end
+	if fs.exists(packagesPath .. "/" .. manifest.name .. "/install.lua") then
+		dofile(packagesPath .. "/" .. manifest.name .. "/install.lua");
+	end;
 end;
 local function setPackageAliases(manifest)
 	local aliases = manifest.aliases or {};
@@ -100,6 +109,11 @@ end;
 local function installPackageCommand(packageLocation)
 	print("Resolving package " .. packageLocation .. "...");
 	local manifest = scaffoldPackage((packageFs(packageLocation))("manifest.lua"));
+	if manifest == nil or manifest.name == nil then
+		error("Something went wrong resolving manifest.");
+	end;
+	print("Package: " .. manifest.name .. ", version " .. manifest.version);
+	setMetaLocation(manifest.name, packageLocation);
 	installPackage(manifest);
 	setPackageAliases(manifest);
 end;
@@ -107,9 +121,10 @@ local function cleanInstall(package)
 	print("Clean-installing " .. package .. "...");
 	local manifest = packageManifest(package);
 	fs.delete(packagesPath .. "/" .. package);
-	installPackageCommand(manifest.location);
+	installPackageCommand(getMetaLocation(package));
 end;
 return {
+	packagesPath = packagesPath,
 	readManifest = readManifest,
 	downloadFile = downloadFile,
 	githubRepo = githubRepo,
@@ -121,5 +136,6 @@ return {
 	installPackage = installPackage,
 	setPackageAliases = setPackageAliases,
 	installPackageCommand = installPackageCommand,
-	cleanInstall = cleanInstall
+	cleanInstall = cleanInstall,
+	getMetaLocation = getMetaLocation
 };

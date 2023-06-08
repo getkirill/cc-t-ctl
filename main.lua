@@ -1,3 +1,4 @@
+local args = {...}
 local lib = require("lib")
 if args[1] == "install" then
 	lib.installPackageCommand(args[2]);
@@ -12,6 +13,6 @@ if args[1] == "list" then
 end;
 if args[1] == "update" then
 	for _, package in pairs(lib.installedPackages()) do
-		lib.installPackageCommand((lib.packageManifest(package)).location);
+		lib.installPackageCommand(lib.getMetaLocation(package));
 	end;
 end;
