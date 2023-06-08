@@ -4,7 +4,7 @@ local function githubRepo(path)
 	end;
 end;
 function downloadFile(url, location)
-	local res = http.get(url);
+	local res = http.get(url, {["Cache-Control"] = "Cache-Control: max-age=0, no-cache, must-revalidate, proxy-revalidate"});
 	local handle = fs.open(location, "w");
 	handle.write(res.readAll());
 	handle.close();
