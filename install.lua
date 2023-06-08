@@ -4,13 +4,13 @@ local function githubRepo(path)
 	end;
 end;
 function downloadFile(url, location)
-  local res = http.get(url)
-		(fs.open(location, "w")).write((res).readAll());
-    res.close()
+	local res = http.get(url);
+	(fs.open(location, "w")).write(res.readAll());
+	res.close();
 end;
 function readManifest(path)
 	local text = (fs.open(path, "r")).readAll();
-  print(text)
+	print(text);
 	return (load(text))();
 end;
 print("Welcome to cc-t-ctl setup!");
@@ -20,13 +20,14 @@ if fs.exists(basePath) and fs.isDir(basePath) then
 	print("Previous installation detected, removing folder...");
 	fs.delete(basePath);
 end;
+fs.mkdir(basePath)
 downloadFile(repo("manifest.lua"), basePath .. "manifest.lua");
-os.sleep(0.1)
+os.sleep(0);
 local manifest = readManifest(basePath .. "manifest.lua");
-print(fs.exists(basePath .. "manifest.lua"))
-print(textutils.serialise(manifest))
+print(fs.exists(basePath .. "manifest.lua"));
+print(textutils.serialise(manifest));
 for _, file in pairs(manifest.files) do
 	downloadFile(repo(file), basePath .. file);
 end;
-print("Downloading finished, package installing...")
-shell.run(basePath.."main.lua", "install", "gh:getkirill/cc-t-ctl/main")
+print("Downloading finished, package installing...");
+shell.run(basePath .. "main.lua", "install", "gh:getkirill/cc-t-ctl/main");
