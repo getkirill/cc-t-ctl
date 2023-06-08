@@ -14,6 +14,10 @@ local files = {
   "README.md"
 }
 local basePath = "/programs/cc-t-ctl/"
+if fs.exists(basePath) and fs.isDir(path) then
+  print("Previous installation detected, removing folder...")
+  fs.delete(basePath)
+end
 for _, file in pairs(files) do
   local url = repo(file)
   shell.run("wget", url, basePath..file)
