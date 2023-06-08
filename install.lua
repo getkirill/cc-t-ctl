@@ -14,7 +14,7 @@ local files = {
   "README.md"
 }
 local basePath = "/programs/cc-t-ctl"
-for file in files do
+for _, file in pairs(files) do
   local url = repo(file)
   shell.run("wget", url, basePath..file)
 end
