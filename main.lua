@@ -113,7 +113,6 @@ if args[1] == "clean-install" then
   if args[2] ~= nil then
     cleanInstall(args[2])
   end
-	--todo add cleaning
 end;
 if args[1] == "list" then
 	for _, package in pairs(installedPackages()) do
