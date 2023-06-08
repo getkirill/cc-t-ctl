@@ -7,6 +7,9 @@ return {
 		"main.lua",
 		"manifest.lua",
     "pseudocode.txt",
-    "README.md"
+    "README.md",
+    "lib.lua",
+    "_startup.lua",
+    "startup.lua",
 	}
 };
