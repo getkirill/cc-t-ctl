@@ -49,6 +49,10 @@ local function installedPackages()
   for _, file in pairs(fs.list(packagesPath)) do
     table.insert(packages, fs.getName(file))
   end
+  return packages
+end
+local function packageManifest(name)
+  return readManifest(packagesPath.."/"..name.."/manifest.lua")
 end
 local function scaffoldPackage(manifestUrl)
 	fs.makeDir("/tmp");
@@ -83,6 +87,16 @@ end;
 if args[1] == "install" then
 	installPackageCommand(args[2]);
 end;
-if args[1] == "list" then
-	print(textutils.serialise(installedPackages()))
+if args[1] == "clean" then
+	--todo add cleaning
 end;
+if args[1] == "list" then
+	for _, package in pairs(installedPackages()) do
+    print(package)
+  end
+end;
+if args[1] == "update" then
+  for _, package in pairs(installedPackages()) do
+    installPackageCommand(packageManifest(package).location)
+  end
+end
