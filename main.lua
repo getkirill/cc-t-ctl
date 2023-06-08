@@ -1,5 +1,6 @@
 args = {...}
-fs.makeDir("/packages/")
+packagesPath = "/packages"
+fs.makeDir(packagesPath)
 function string.split (inputstr, sep)
   if sep == nil then
           sep = "%s"
@@ -32,32 +33,42 @@ local function packageFs(location)
 end
 
 -- local function installedPackages()
---   return string.split(fs.open("/packages/index.txt", "r").readAll(), "\n") or {}
+--   return string.split(fs.open(packagesPath.."/index.txt", "r").readAll(), "\n") or {}
 -- end
 local function scaffoldPackage(manifestUrl)
   fs.makeDir("/tmp")
   shell.run("wget", manifestUrl, "/tmp/manifest.lua")
   local manifest = readManifest("/tmp/manifest.lua")
-  fs.makeDir("/packages/"..manifest.name)
-  if fs.exists("/packages/"..manifest.name.."/manifest.lua") then
-    fs.delete("/packages/"..manifest.name.."/manifest.lua")
+  fs.makeDir(packagesPath.."/"..manifest.name)
+  if fs.exists(packagesPath.."/"..manifest.name.."/manifest.lua") then
+    fs.delete(packagesPath.."/"..manifest.name.."/manifest.lua")
   end
-  fs.move("/tmp/manifest.lua", "/packages/"..manifest.name.."/manifest.lua")
+  fs.move("/tmp/manifest.lua", packagesPath.."/"..manifest.name.."/manifest.lua")
   return manifest
 end
 local function installPackage(manifest)
   local packageFs = packageFs(manifest.location)
   for _, file in pairs(manifest.files) do
-    if fs.exists("/packages/"..manifest.name.."/"..file) then
-      fs.delete("/packages/"..manifest.name.."/"..file) -- these are hacks, i will make custom wget later
+    if fs.exists(packagesPath.."/"..manifest.name.."/"..file) then
+      fs.delete(packagesPath.."/"..manifest.name.."/"..file) -- these are hacks, i will make custom wget later
     end
-    shell.run("wget", packageFs(file), "/packages/"..manifest.name.."/"..file)
+    shell.run("wget", packageFs(file), packagesPath.."/"..manifest.name.."/"..file)
+  end
+end
+local function setPackageAliases(manifest)
+  local aliases = manifest.aliases or {}
+  if fs.exists(packagesPath.."/"..manifest.name.."/main.lua") then
+    aliases[manifest.name] = "main.lua"
+  end
+  for alias, value in pairs(aliases) do
+    shell.setAlias(alias, packagesPath.."/"..manifest.name.."/"..value)
   end
 end
 
 local function installPackageCommand(packageLocation)
   local manifest = scaffoldPackage(packageFs(packageLocation)("manifest.lua"))
   installPackage(manifest)
+  setPackageAliases(manifest)
 end
 
 -- TODO: Use mpeterv/argparse
