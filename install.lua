@@ -19,6 +19,8 @@ if fs.exists(basePath) and fs.isDir(basePath) then
 end;
 downloadFile(repo("manifest.lua"), basePath .. "manifest.lua");
 local manifest = readManifest(basePath .. "manifest.lua");
+print(fs.exists(basePath .. "manifest.lua"))
+print(textutils.serialise(manifest))
 for _, file in pairs(manifest.files) do
 	downloadFile(packageFs(file), basePath .. file);
 end;
