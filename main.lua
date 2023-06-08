@@ -44,10 +44,17 @@ local function githubRepo(path)
 		return "https://raw.githubusercontent.com/" .. path .. "/" .. file .. "?random=" .. tostring(math.random(10000000));
 	end;
 end;
+local function httpRepo(path)
+  return function(file)
+		return path..file
+	end;
+end
 local function packageFs(location)
 	if string.starts(location, "gh:") then
 		return githubRepo(string.sub(location, 4));
-	end;
+  elseif string.starts(location, "http:") then
+		return httpRepo(string.sub(location, 6));
+  end;
 	return function(location)
 		return nil;
 	end;
