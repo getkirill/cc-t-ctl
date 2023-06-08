@@ -102,11 +102,9 @@ end
 if args[1] == "install" then
 	installPackageCommand(args[2]);
 end;
-if args[1] == "clean" then
+if args[1] == "clean-install" then
   if args[2] ~= nil then
-    cleanPackage(args[2])
-  else
-    --cleanPackages()
+    cleanInstall(args[2])
   end
 	--todo add cleaning
 end;
