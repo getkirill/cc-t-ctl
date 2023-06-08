@@ -13,6 +13,10 @@ end
 function string.starts(String,Start)
   return string.sub(String,1,string.len(Start))==Start
 end
+function readManifest(path)
+  local text = fs.open(path, "r").readAll()
+  return load(text)()
+end
 
 local function githubRepo(path)
   return function(file)
@@ -27,13 +31,30 @@ local function packageFs(location)
   return function (location) return nil end
 end
 
-local function installedPackages()
-  return string.split(fs.open("/packages/index.txt", "r").readAll(), "\n") or {}
+-- local function installedPackages()
+--   return string.split(fs.open("/packages/index.txt", "r").readAll(), "\n") or {}
+-- end
+local function scaffoldPackage(manifestUrl)
+  fs.makeDir("/tmp")
+  shell.run("wget", manifestUrl, "/tmp/manifest.lua")
+  local manifest = readManifest("/tmp/manifest.lua")
+  fs.makeDir("/packages/"..manifest.name)
+  fs.move("/tmp/manifest.lua", "/packages/"..manifest.name.."/manifest.lua")
+  return manifest
 end
 local function installPackage(manifest)
-  fs.makeDir("/packages/"..manifest.name)
-  local repo = packageFs(manifest.location)
-  for file in manifest.files do
-    shell.run("wget", repo(file), "/packages/"..manifest.name.."/"..file)
+  local packageFs = packageFs(manifest.location)
+  for _, file in pairs(manifest.files) do
+    shell.run("wget", packageFs(file), "/packages/"..manifest.name.."/"..file)
   end
+end
+
+local function installPackageCommand(packageLocation)
+  local manifest = scaffoldPackage(packageFs(packageLocation)("manifest.lua"))
+  installPackage(manifest)
+end
+
+-- TODO: Use mpeterv/argparse
+if args[1] == "install" then
+  installPackageCommand(args[2])
 end
