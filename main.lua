@@ -45,6 +45,9 @@ end
 local function installPackage(manifest)
   local packageFs = packageFs(manifest.location)
   for _, file in pairs(manifest.files) do
+    if fs.exists("/packages/"..manifest.name.."/"..file) then
+      fs.delete("/packages/"..manifest.name.."/"..file) -- these are hacks, i will make custom wget later
+    end
     shell.run("wget", packageFs(file), "/packages/"..manifest.name.."/"..file)
   end
 end
