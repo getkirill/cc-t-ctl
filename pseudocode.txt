@@ -1,0 +1,14 @@
+# this is pseudocode for the package manager
+# jump to specific sections by searching for markers such as :pm-install
+:pm-install
+user will download install script from pastebin or github
+user runs script
+script will download package manager as a package for package manager, and then returns control to it for proper install
+
+:pm-install-package
+user runs command 'systemctl install gh:example/example-package'
+it will fetch manifest in that github repository
+then, for each file in manifest
+  wget url file
+end
+then, it will add symlinks to commands for package inside /binaries/ (and it will be available in the path)

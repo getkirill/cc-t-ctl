@@ -3,4 +3,4 @@ another another package manager
 ## Features
  - [ ] Downloading from GitHub and Gists
  - [ ] Startup managing
-  - [ ] Safe mode for startups
+    - [ ] Safe mode for startups
