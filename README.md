@@ -1,6 +1,7 @@
 # cc-t-ctl
 another another package manager
 ## Features
- - [ ] Downloading from GitHub and Gists
+ - [x] Downloading from GitHub
+ - [ ] Downloading from Gists
  - [ ] Startup managing
     - [ ] Safe mode for startups
