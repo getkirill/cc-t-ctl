@@ -53,6 +53,7 @@ end;
 local function installPackage(manifest)
 	local packageFs = packageFs(manifest.location);
 	for _, file in pairs(manifest.files) do
+    print("Downloading "..file.."...")
 		downloadFile(packageFs(file), packagesPath .. "/" .. manifest.name .. "/" .. file);
 	end;
 end;
@@ -67,6 +68,7 @@ local function setPackageAliases(manifest)
 	end;
 end;
 local function installPackageCommand(packageLocation)
+  print("Resolving package "..packageLocation.."...")
 	local manifest = scaffoldPackage((packageFs(packageLocation))("manifest.lua"));
 	installPackage(manifest);
 	setPackageAliases(manifest);

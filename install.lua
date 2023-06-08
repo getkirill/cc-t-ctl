@@ -12,7 +12,6 @@ function downloadFile(url, location)
 end;
 function readManifest(path)
 	local text = (fs.open(path, "r")).readAll();
-	print(text);
 	return (load(text))();
 end;
 print("Welcome to cc-t-ctl setup!");
@@ -25,10 +24,8 @@ end;
 fs.makeDir(basePath);
 downloadFile(repo("manifest.lua"), basePath .. "manifest.lua");
 local manifest = readManifest(basePath .. "manifest.lua");
-print(fs.exists(basePath .. "manifest.lua"));
-print(textutils.serialise(manifest));
 for _, file in pairs(manifest.files) do
 	downloadFile(repo(file), basePath .. file);
 end;
-print("Downloading finished, package installing...");
+print("Downloading finished, transferring control to cc-t-ctl...");
 shell.run(basePath .. "main.lua", "install", "gh:getkirill/cc-t-ctl/main");
