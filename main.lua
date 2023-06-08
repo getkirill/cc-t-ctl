@@ -58,9 +58,10 @@ end
 local function setPackageAliases(manifest)
   local aliases = manifest.aliases or {}
   if fs.exists(packagesPath.."/"..manifest.name.."/main.lua") then
-    aliases[manifest.name] = "main.lua"
+    aliases[manifest.name] = aliases[manifest.name] or "main.lua"
   end
   for alias, value in pairs(aliases) do
+    print("Setting alias "..alias.." to "..packagesPath.."/"..manifest.name.."/"..value)
     shell.setAlias(alias, packagesPath.."/"..manifest.name.."/"..value)
   end
 end
