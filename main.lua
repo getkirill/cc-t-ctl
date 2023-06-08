@@ -43,6 +43,13 @@ local function packageFs(location)
 		return nil;
 	end;
 end;
+
+local function installedPackages()
+  local packages = {}
+  for _, file in pairs(fs.list(packagesPath)) do
+    table.insert(packages, fs.getName(file))
+  end
+end
 local function scaffoldPackage(manifestUrl)
 	fs.makeDir("/tmp");
 	downloadFile(manifestUrl, "/tmp/manifest.lua");
@@ -75,4 +82,7 @@ local function installPackageCommand(packageLocation)
 end;
 if args[1] == "install" then
 	installPackageCommand(args[2]);
+end;
+if args[1] == "list" then
+	print(textutils.serialise(installedPackages()))
 end;
