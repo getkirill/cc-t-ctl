@@ -8,6 +8,7 @@ function downloadFile(url, location)
 end;
 function readManifest(path)
 	local text = (fs.open(path, "r")).readAll();
+  print(text)
 	return (load(text))();
 end;
 print("Welcome to cc-t-ctl setup!");
