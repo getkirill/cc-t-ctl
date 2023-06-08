@@ -8,6 +8,6 @@ another another package manager
 ## Install
 Run following commands in CraftOS shell:
 ```
-wget https://raw.githubusercontent.com/getkirill/cc-t-ctl/main/install.lua cc-t-ctl.installer.lua
+wget https://raw.githubusercontent.com/getkirill/cc-t-ctl/main/installer.lua cc-t-ctl.installer.lua
 cc-t-ctl.installer
 ```

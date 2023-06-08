@@ -1,0 +1,1 @@
+print("No package updates available.")
