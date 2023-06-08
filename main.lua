@@ -18,6 +18,13 @@ function readManifest(path)
   local text = fs.open(path, "r").readAll()
   return load(text)()
 end
+function downloadFile(url, location, binary)
+  if binary then
+    -- todo
+  else
+    fs.open(location, "w").write(http.get(url).readAll())
+  end
+end
 
 local function githubRepo(path)
   return function(file)
@@ -37,22 +44,15 @@ end
 -- end
 local function scaffoldPackage(manifestUrl)
   fs.makeDir("/tmp")
-  shell.run("wget", manifestUrl, "/tmp/manifest.lua")
+  downloadFile(manifestUrl, "/tmp/manifest.lua")
   local manifest = readManifest("/tmp/manifest.lua")
   fs.makeDir(packagesPath.."/"..manifest.name)
-  if fs.exists(packagesPath.."/"..manifest.name.."/manifest.lua") then
-    fs.delete(packagesPath.."/"..manifest.name.."/manifest.lua")
-  end
-  fs.move("/tmp/manifest.lua", packagesPath.."/"..manifest.name.."/manifest.lua")
   return manifest
 end
 local function installPackage(manifest)
   local packageFs = packageFs(manifest.location)
   for _, file in pairs(manifest.files) do
-    if fs.exists(packagesPath.."/"..manifest.name.."/"..file) then
-      fs.delete(packagesPath.."/"..manifest.name.."/"..file) -- these are hacks, i will make custom wget later
-    end
-    shell.run("wget", packageFs(file), packagesPath.."/"..manifest.name.."/"..file)
+    downloadFile(packageFs(file), packagesPath.."/"..manifest.name.."/"..file)
   end
 end
 local function setPackageAliases(manifest)
