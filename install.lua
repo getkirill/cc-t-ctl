@@ -19,6 +19,7 @@ if fs.exists(basePath) and fs.isDir(basePath) then
 	fs.delete(basePath);
 end;
 downloadFile(repo("manifest.lua"), basePath .. "manifest.lua");
+os.sleep(1)
 local manifest = readManifest(basePath .. "manifest.lua");
 print(fs.exists(basePath .. "manifest.lua"))
 print(textutils.serialise(manifest))
