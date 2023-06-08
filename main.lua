@@ -39,6 +39,9 @@ local function scaffoldPackage(manifestUrl)
   shell.run("wget", manifestUrl, "/tmp/manifest.lua")
   local manifest = readManifest("/tmp/manifest.lua")
   fs.makeDir("/packages/"..manifest.name)
+  if fs.exists("/packages/"..manifest.name.."/manifest.lua") then
+    fs.delete("/packages/"..manifest.name.."/manifest.lua")
+  end
   fs.move("/tmp/manifest.lua", "/packages/"..manifest.name.."/manifest.lua")
   return manifest
 end
