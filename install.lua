@@ -19,12 +19,12 @@ if fs.exists(basePath) and fs.isDir(basePath) then
 	fs.delete(basePath);
 end;
 downloadFile(repo("manifest.lua"), basePath .. "manifest.lua");
-os.sleep(1)
+os.sleep(0.1)
 local manifest = readManifest(basePath .. "manifest.lua");
 print(fs.exists(basePath .. "manifest.lua"))
 print(textutils.serialise(manifest))
 for _, file in pairs(manifest.files) do
-	downloadFile(packageFs(file), basePath .. file);
+	downloadFile(repo(file), basePath .. file);
 end;
 print("Downloading finished, package installing...")
 shell.run(basePath.."main.lua", "install", "gh:getkirill/cc-t-ctl/main")
