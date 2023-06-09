@@ -45,6 +45,11 @@ local function githubRepo(path)
 		return "https://raw.githubusercontent.com/" .. path .. "/" .. file .. "?random=" .. tostring(math.random(10000000));
 	end;
 end;
+local function gistRepo(path)
+	return function(file)
+		return "https://gist.githubusercontent.com/" .. path .. "/raw/" .. file .. "?random=" .. tostring(math.random(10000000));
+	end;
+end;
 local function httpRepo(path)
 	return function(file)
 		return path .. file;
@@ -55,6 +60,8 @@ local function packageFs(location)
 		return githubRepo(string.sub(location, 4));
 	elseif string.starts(location, "http:") then
 		return httpRepo(string.sub(location, 6));
+	elseif string.starts(location, "gist:") then
+		return gistRepo(string.sub(location, 6));
 	end;
 	return function(location)
 		return nil;
@@ -123,6 +130,11 @@ local function cleanInstall(package)
 	fs.delete(packagesPath .. "/" .. package);
 	installPackageCommand(getMetaLocation(package));
 end;
+local function deletePackage(package)
+	print("Deleting " .. package .. "...");
+	local manifest = packageManifest(package);
+	fs.delete(packagesPath .. "/" .. package);
+end;
 return {
 	packagesPath = packagesPath,
 	readManifest = readManifest,
@@ -137,5 +149,6 @@ return {
 	setPackageAliases = setPackageAliases,
 	installPackageCommand = installPackageCommand,
 	cleanInstall = cleanInstall,
-	getMetaLocation = getMetaLocation
+	getMetaLocation = getMetaLocation,
+	deletePackage = deletePackage
 };

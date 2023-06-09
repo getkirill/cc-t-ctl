@@ -2,7 +2,7 @@
 systemd of CC:T world
 ## Features
  - [x] Downloading from GitHub
- - [ ] Downloading from Gists
+ - [x] Downloading from Gists
  - [x] Downloading from other http(s) hosts
  - [x] Startup managing
     - [x] Safe mode for startups

@@ -3,6 +3,9 @@ local lib = require("lib")
 if args[1] == "install" then
 	lib.installPackageCommand(args[2]);
 end;
+if args[1] == "delete" or args[1] == "remove" then
+	lib.deletePackage(args[2]);
+end;
 if args[1] == "clean-install" then
 	lib.cleanInstall(args[2]);
 end;

@@ -38,7 +38,7 @@ for _, package in pairs(lib.installedPackages()) do
 	for _, script in pairs(startupScripts) do
 		if table.contains(noRun, lib.packagesPath .. "/" .. package .. "/" .. script) then
 			print("Script " .. script .. " of " .. manifest.name .. " located at '" .. (lib.packagesPath .. "/" .. package .. "/" .. script) .. "' will not run, was defined in '/norun.txt'");
-		else
+		elseif fs.exists(lib.packagesPath .. "/" .. package .. "/" .. script) then
 			print("Running " .. script .. " of " .. manifest.name .. " located at '" .. (lib.packagesPath .. "/" .. package .. "/" .. script) .. "'");
 			(loadfile(lib.packagesPath .. "/" .. package .. "/" .. script, _ENV))();
 		end;
